@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/modelcontextprotocol/registry/main/docs/reference/server-json/draft/server.schema.json",
+  "name": "com.odilelabs/odile",
+  "title": "Odile Labs",
+  "description": "Turn footage and photos into platform-ready video, and send a note-taker to a Zoom, Meet or Teams call that emails the summary. Priced in credits and meeting minutes, quoted before anything is spent.",
+  "version": "1.0.0",
+  "websiteUrl": "https://odilelabs.com/developers",
+  "repository": {
+    "url": "https://github.com/tolga-boop/odile-mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://odilelabs.com/media/odile-icon-192.png",
+      "mimeType": "image/png",
+      "sizes": ["192x192"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://odilelabs.com/mcp"
+    }
+  ]
+}
