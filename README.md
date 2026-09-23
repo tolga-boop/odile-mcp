@@ -2,12 +2,29 @@
 
 A hosted [Model Context Protocol](https://modelcontextprotocol.io) server at
 `https://odilelabs.com/mcp`, so an agent — Claude Code, Codex, or anything else
-that speaks MCP — can do two jobs on a person's behalf:
+that speaks MCP — can work with Odile Labs on a person's behalf.
 
-- **Make** — turn footage or photos into platform-ready video for Instagram,
-  YouTube and TikTok.
+Before any sign-in, three tools answer:
+
+- **`get_receptionist_benchmark`** — Odile Labs' published benchmark of AI phone
+  receptionists: real test calls to public lines, scored against stated
+  measures, with the evidence per measure. Run by Odile Labs, which sells two
+  of the lines tested, and the output says so first.
+- **`get_catalog`** and **`estimate_media_job`** — the live Make price list, and
+  the price of a job before anything is uploaded.
+
+Signed in, the agent can use:
+
+- **Make** — turn footage or photos into platform-ready video and images for
+  Instagram, YouTube and TikTok.
 - **Meeting notes** — send a note-taker to a Zoom, Google Meet or Microsoft
   Teams call and email the summary to the people the account owner names.
+  These tools appear only on a deployment where Meeting notes is switched on.
+
+**What is not here.** Odile Labs' phone receptionist — sold as After Hours in
+the United States and Canada and as Dusklin everywhere else — is set up on the
+website (odilelabs.com/afterhours, dusklin.com), not through this server. The
+benchmark tool is the server's only receptionist surface.
 
 This repository is the public record of the server: what it exposes, how it
 authenticates, and what it costs. The service itself is closed source.
@@ -23,9 +40,12 @@ a browser on first use.
 
 ## Authentication
 
-**OAuth 2.1, on every tool, including the read-only ones.** There is no
-anonymous surface: an unauthenticated request gets a `401` carrying the
-discovery header the MCP specification asks for.
+**Three tools are public; everything that touches an account is OAuth 2.1.**
+Without a token, a client can complete the handshake, list the tools, and call
+`get_receptionist_benchmark`, `get_catalog` and `estimate_media_job` — constants,
+arithmetic and a published dataset, none of it about any account. Every other
+tool, and any request that carries a token (valid or not), gets the standard
+`401` with the discovery header the MCP specification asks for:
 
     WWW-Authenticate: Bearer realm="OAuth",
       resource_metadata="https://odilelabs.com/.well-known/oauth-protected-resource/mcp"
@@ -40,9 +60,15 @@ without a ceiling the account owner has agreed to — see `unlock_job` below.
 
 ## The tools
 
-Eight are always present. Four more appear only on an account with Meeting Notes
-enabled, so a client that sees twelve and a client that sees eight are both
+Nine are always present. Four more appear only on an account with Meeting Notes
+enabled, so a client that sees thirteen and a client that sees nine are both
 correct.
+
+### Public — no account
+
+| Tool | What it does |
+|---|---|
+| `get_receptionist_benchmark` | The published receptionist benchmark: date, lines tested, points by scenario, the fairness note and the limitations. Filter by `line_id` or `scenario_id`; pass `include_evidence` for the quoted evidence per measure. Vendor-run by Odile Labs, and it says so |
 
 ### Make — video and photos
 

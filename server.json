@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "com.odilelabs/odile",
   "title": "Odile Labs",
-  "description": "Reformat video and photos for social, and send a note-taker to a Zoom, Meet or Teams call.",
-  "version": "1.0.0",
+  "description": "Odile Make reformats video and photos for social. Receptionist benchmark and prices need no sign-in.",
+  "version": "1.1.0",
   "websiteUrl": "https://odilelabs.com/developers",
   "repository": {
     "url": "https://github.com/tolga-boop/odile-mcp",
