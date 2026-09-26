@@ -1,5 +1,9 @@
 # Odile Labs — MCP server
 
+Odile is a hosted, paid service run by OdileUSA L.L.C. This repository holds only
+the MCP connector listing and instructions, not the service's source code, and
+is not open source.
+
 A hosted [Model Context Protocol](https://modelcontextprotocol.io) server at
 `https://odilelabs.com/mcp`, so an agent — Claude Code, Codex, or anything else
 that speaks MCP — can work with Odile Labs on a person's behalf.
