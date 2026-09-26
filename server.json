@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "com.odilelabs/odile",
   "title": "Odile Labs",
-  "description": "Odile Make reformats video and photos for social. Receptionist benchmark and prices need no sign-in.",
-  "version": "1.1.0",
+  "description": "An AI answering line for US businesses, paid per answered call; Odile Formats for video and photos.",
+  "version": "1.2.0",
   "websiteUrl": "https://odilelabs.com/developers",
   "repository": {
     "url": "https://github.com/tolga-boop/odile-mcp",
