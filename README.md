@@ -14,19 +14,22 @@ Before any sign-in, four tools answer:
   receptionists: real test calls to public lines, scored against stated
   measures, with the evidence per measure. Run by Odile Labs, which sells two
   of the lines tested, and the output says so first.
-- **`get_answering_line_offer`** — the After Hours answering line sold per
-  answered call: the packs, what counts as an answered call, what happens when
-  the calls run out, and what the owner has to do.
+- **`get_answering_line_offer`** — the After Hours answering line billed per
+  minute: the packs, what is charged, what happens at zero, and what the owner
+  has to do.
 - **`get_catalog`** and **`estimate_media_job`** — the live Odile Formats price
   list, and the price of a job before anything is uploaded.
 
 Signed in, the agent can use:
 
+- **A free test line** — `try_answering_line` returns a shared test number and a
+  4-digit code; calling it reaches an AI receptionist answering as the business
+  the agent described. Nothing is booked, sent or charged. Any signed-in account.
 - **After Hours answering line** — set up an AI answering line for a US
-  business, billed per answered call from a prepaid pack, with no monthly fee,
-  and read its status.
+  business, billed per minute from a prepaid pack, with no monthly fee, and
+  read its status, calls and messages.
 - **Packs** — a one-tap Stripe Checkout link for Odile Formats credits, meeting
-  minutes or answering-line calls. The owner pays on Stripe's own page; the
+  minutes or phone minutes. The owner pays on Stripe's own page; the
   connection never sees a card.
 - **Odile Formats** — turn footage or photos into platform-ready video and
   images for Instagram, YouTube and TikTok.
@@ -37,7 +40,7 @@ Signed in, the agent can use:
 The monthly After Hours plans (United States and Canada) and Dusklin, the same
 receptionist sold everywhere else, are still set up on the website
 (odilelabs.com/afterhours, dusklin.com). The per-call line is the one set up
-through this server, for businesses in the United States.
+through this server, for businesses in the United States, billed per minute.
 
 This repository is the public record of the server: what it exposes, how it
 authenticates, and what it costs. The service itself is closed source.
@@ -81,48 +84,57 @@ already holds, and it never runs without a ceiling the owner agreed to.
 
 ## The tools
 
-Thirteen are always present. Four more appear only on an account with Meeting
-Notes enabled, so a client that sees seventeen and a client that sees thirteen
-are both correct.
+Sixteen are always present. Four more appear only on a deployment with Meeting
+Notes enabled, so a client that sees twenty and a client that sees sixteen are
+both correct.
 
 ### Public — no account
 
 | Tool | What it does |
 |---|---|
 | `get_receptionist_benchmark` | The published receptionist benchmark: date, lines tested, points by scenario, the fairness note and the limitations. Filter by `line_id` or `scenario_id`; pass `include_evidence` for the quoted evidence per measure. Vendor-run by Odile Labs, and it says so |
-| `get_answering_line_offer` | The per-call answering line: the packs and their prices, what counts as an answered call, what happens at zero, where it is sold, what the owner must do, and the terms link |
+| `get_answering_line_offer` | The answering line billed per minute: the packs and their prices, what is charged, what happens at zero, where it is sold, what the owner must do, and the terms link |
 | `get_catalog` | The live Odile Formats price list and limits, read from the same source the website charges from |
 | `estimate_media_job` | Prices an Odile Formats job **before** anything is uploaded or charged |
 
-### After Hours answering line — per answered call
+### After Hours answering line — per minute
 
 | Tool | What it does |
 |---|---|
+| `try_answering_line` | Free. A shared test number and a 4-digit code (24 hours, 5 calls; 3 test lines a day per account). Calling it and keying the code reaches an AI receptionist answering as the business described; `hear_url` plays the same receptionist in a browser. Nothing is booked, sent or charged |
 | `set_up_answering_line` | Takes the business details, builds the greeting, and returns a checkout link for the first pack. Runs only after the owner has seen the terms and said yes. Nothing is set up or charged until that pack is paid |
-| `get_answering_line` | The owner's own per-call lines: status, the number, the forwarding codes, calls left, and the last calls charged (caller shown as the last four digits only) |
+| `get_answering_line` | The owner's own lines: status, the number, the forwarding codes, the balance in minutes, and the last calls charged |
+| `get_line_calls` | One line's calls, newest first: time, caller, duration, summary, urgent. No audio links |
+| `get_line_messages` | One line's messages, newest first: name, number, what they need, urgent |
 
-The line is paid for in prepaid packs, with no monthly fee:
+The line is paid for in prepaid minute packs, with no monthly fee:
 
-| Pack | Price | Per call |
+| Pack | Price | Per minute |
 |---|---|---|
-| 10 answered calls | $15 | $1.50 |
-| 50 answered calls | $75 | $1.50 |
+| 40 minutes | $10 | $0.25 |
+| 200 minutes | $50 | $0.25 |
 
-**An answered call** is a phone call the receptionist answered that lasted at
-least 20 seconds. Recognised robocalls, shorter calls and the owner's own test
-calls are free. Calls are counted after they end, once each.
+Answered phone calls are billed by the second, with a 20-second minimum.
+Robocalls, calls from the owner's own numbers, website chats, text messages and
+calls whose transcript cannot be read are not charged.
 
-When the calls run out the line keeps answering, and up to 10 calls carry over
-to the next pack. The owner forwards their business line to the new number with
-their carrier's forwarding code; `get_answering_line` returns the codes. The
-greeting always says the call is recorded and that the caller is speaking with
-an AI.
+At zero the line keeps answering and the balance goes below zero; the next pack
+pays that first. The owner is emailed at 5 minutes left, at zero, and at 10
+minutes below zero, and nothing switches the line off on its own. The owner
+forwards their business line to the new number with their carrier's forwarding
+code; `get_answering_line` returns the codes. The greeting always says the call
+is recorded and that the caller is speaking with an AI. Lines set up before
+per-minute billing keep their answered-call packs.
+
+The same calls are on a REST API at `https://api.odilelabs.com/v1` with an API
+key made at [odilelabs.com/developers](https://odilelabs.com/developers); the
+OpenAPI 3.1 spec is [odilelabs.com/openapi.json](https://odilelabs.com/openapi.json).
 
 ### Packs
 
 | Tool | What it does |
 |---|---|
-| `buy_pack` | A Stripe Checkout link for an Odile Formats credit pack, a meeting-minute pack, or a call pack for one of the owner's own answering lines. Returns the link, the price and what the pack adds. The pack is added once Stripe confirms the payment |
+| `buy_pack` | A Stripe Checkout link for an Odile Formats credit pack, a meeting-minute pack, or a phone-minute pack for one of the owner's own answering lines. Returns the link, the price and what the pack adds. The pack is added once Stripe confirms the payment |
 
 ### Odile Formats — video and photos
 
@@ -152,9 +164,10 @@ returned. Every minute on the call is charged, rounded up to the minute.
 
 ## What it costs
 
-Answered calls for the answering line, credits for media, minutes for meetings,
-each bought in prepaid packs and quoted before anything is spent. The call packs
-are 10 for $15 and 50 for $75, with no monthly fee. `get_answering_line_offer`,
+Phone minutes for the answering line, credits for media, minutes for meetings,
+each bought in prepaid packs and quoted before anything is spent. Phone minutes
+are 40 for $10 and 200 for $50 ($0.25 a minute), with no monthly fee, and the
+test line is free. `get_answering_line_offer`,
 `get_catalog` and `estimate_media_job` are the honest way to find out what
 something costs without committing to it. Every price is on
 [odilelabs.com/developers](https://odilelabs.com/developers), is the same for
