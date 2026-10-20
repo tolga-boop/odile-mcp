@@ -56,11 +56,11 @@ a browser on first use.
 
 ## Authentication
 
-**Four tools are public; everything that touches an account is OAuth 2.1.**
+**Six tools are public; everything that touches an account is OAuth 2.1.**
 Without a token, a client can complete the handshake, list the tools, and call
-`get_receptionist_benchmark`, `get_answering_line_offer`, `get_catalog` and
-`estimate_media_job` — constants, arithmetic and a published dataset, none of it
-about any account. Every other tool, and any request that carries a token
+`get_receptionist_benchmark`, `get_answering_line_offer`, `get_catalog`,
+`estimate_media_job`, and the two Odile Direct tools `find_business_agent` and
+`send_to_business` (free within per-IP caps) — none of them read an account. Every other tool, and any request that carries a token
 (valid or not), gets the standard `401` with the discovery header the MCP
 specification asks for:
 
@@ -84,9 +84,8 @@ already holds, and it never runs without a ceiling the owner agreed to.
 
 ## The tools
 
-Sixteen are always present. Four more appear only on a deployment with Meeting
-Notes enabled, so a client that sees twenty and a client that sees sixteen are
-both correct.
+The tools below are always present. Four more appear only on a deployment with
+Meeting Notes enabled.
 
 ### Public — no account
 
@@ -96,6 +95,13 @@ both correct.
 | `get_answering_line_offer` | The answering line billed per minute: the packs and their prices, what is charged, what happens at zero, where it is sold, what the owner must do, and the terms link |
 | `get_catalog` | The live Odile Formats price list and limits, read from the same source the website charges from |
 | `estimate_media_job` | Prices an Odile Formats job **before** anything is uploaded or charged |
+
+### Odile Direct — reach a business's agent ([odilelabs.com/a2a](https://odilelabs.com/a2a))
+
+| Tool | What it does |
+|---|---|
+| `find_business_agent` | Resolves a phone number (E.164) to that business's public Odile Direct agent card: what it can do (take a message, check availability, book). 30 lookups per IP per hour without sign-in; 10,000 per key per day signed in |
+| `send_to_business` | Sends the business a message, an availability check or a booking through Odile Direct. Without sign-in: free within IP caps. Signed in: the first 50 completed tasks per account each month are free, then a delivered message is 1 credit, a confirmed booking 5, an availability check free (100 credits are $10). Keep `message_id` unchanged on a retry; one keyed task per account runs at a time. Free claimed listings take messages only, up to 20 a day |
 
 ### After Hours answering line — per minute
 
