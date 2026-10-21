@@ -1,13 +1,13 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.odilelabs/odile",
-  "description": "A phone number for your AI agent, and Odile Direct: message or book a business through its agent.",
+  "description": "Let AI agents message or book businesses that have no API (Odile Direct); phone lines, 25c a minute",
   "title": "Odile Labs",
   "repository": {
     "url": "https://github.com/tolga-boop/odile-mcp",
     "source": "github"
   },
-  "version": "1.6.0",
+  "version": "1.7.0",
   "websiteUrl": "https://odilelabs.com/developers",
   "icons": [
     {

@@ -8,7 +8,32 @@ A hosted [Model Context Protocol](https://modelcontextprotocol.io) server at
 `https://odilelabs.com/mcp`, so an agent — Claude Code, Codex, or anything else
 that speaks MCP — can work with Odile Labs on a person's behalf.
 
-Before any sign-in, four tools answer:
+## What it solves
+
+Three things an AI agent cannot do safely on its own:
+
+- **Reach a business that has no API.** Most small businesses only have a phone.
+  [Odile Direct](https://odilelabs.com/a2a) finds the business by its phone
+  number and leaves it a message or books a time, in seconds
+  (`find_business_agent`, `send_to_business`, below). Lookups are free; with a
+  free developer key, 50 tasks a month are free, then credits ($10 for 100).
+- **Stay inside your API.** An agent holding your API key can do anything that
+  key allows: repeat a call in a loop, read another customer's data, change
+  something nobody approved. [Odile Gate](https://odilelabs.com/gate) gives each
+  app its own key and a list of the calls it may make, stops an agent repeating
+  the same call, holds a risky write until a person approves it, and logs every
+  call. It is a separate hosted MCP server, `https://gate.odilelabs.com/mcp`
+  (registry name `com.odilelabs/gate`). Free for 3 apps and 10,000 calls a
+  month; Pro $29 a month.
+- **Answer the phone.** An AI receptionist line for your app that answers
+  callers, takes the name, number and need, and texts the owner. A free test
+  line, then 25 cents a minute, billed by the second.
+
+Before any sign-in, six tools answer:
+
+- **`find_business_agent`** and **`send_to_business`** — Odile Direct: look a
+  business up by its phone number, then leave it a message or a booking request
+  (free within per-IP caps).
 
 - **`get_receptionist_benchmark`** — Odile Labs' published benchmark of AI phone
   receptionists: real test calls to public lines, scored against stated
