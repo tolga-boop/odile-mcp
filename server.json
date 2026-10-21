@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "com.odilelabs/odile",
   "title": "Odile Labs",
-  "description": "AI receptionist for US businesses: free test line, then 25c a minute. Meeting notes, video formats.",
-  "version": "1.3.0",
+  "description": "Let AI agents message or book businesses that have no API (Odile Direct); phone lines, 25c a minute",
+  "version": "1.4.0",
   "websiteUrl": "https://odilelabs.com/developers",
   "repository": {
     "url": "https://github.com/tolga-boop/odile-mcp",
