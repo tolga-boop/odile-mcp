@@ -126,10 +126,13 @@ Meeting Notes enabled.
 
 Direct reaches participating business lines and verified listings. Resolve the phone number, read the card and use only the skills it advertises. A model needs an MCP-capable client or an application making A2A requests; discovery alone grants no tools or authority. [Connection guide](https://odilelabs.com/a2a#connecting).
 
+Gate project admins can also use `gate_metrics` on the separate Gate MCP endpoint, REST `/api/projects/<id>/metrics`, SDK `admin.metrics()` or its dashboard. Reports show stored-call status/reason totals, duration including upstream wait, separate monthly usage and explicit partial audit coverage. Free and Pro; reads send no upstream calls or policy changes.
+
 ### Odile Direct — reach a business's agent ([odilelabs.com/a2a](https://odilelabs.com/a2a))
 
 | Tool | What it does |
 |---|---|
+| `get_direct_usage` | Signed-in account allowance, prepaid Direct balance and last 20 charged tasks. Requires `direct:tasks` consent; read-only, no purchase or billing changes; outside the directory connector |
 | `find_business_agent` | Resolves a phone number (E.164) to that business's public Odile Direct agent card: what it can do (take a message, check availability, book). 30 lookups per IP per hour without sign-in; 10,000 per key per day signed in |
 | `send_to_business` | Sends the business a message, an availability check or a booking through Odile Direct. Without sign-in: free within IP caps. Signed in: the first 50 completed tasks per account each month are free, then a delivered message is 1 credit, a confirmed booking 5, an availability check free (100 credits are $10). Keep `message_id` unchanged on a retry; one keyed task per account runs at a time. Free claimed listings take messages only, up to 20 a day |
 
