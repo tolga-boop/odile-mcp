@@ -29,7 +29,9 @@ Three things an AI agent cannot do safely on its own:
   callers, takes the name, number and need, and texts the owner. A free test
   line, then 25 cents a minute, billed by the second.
 
-Before any sign-in, six tools answer:
+Before any sign-in, seven tools answer:
+
+- **`get_agent_services`** — when Gate API enforcement or Direct business communication fits your task, their connection URLs, first steps, free allowances and limits. Read-only, no account access or business contact. Gate uses a separate MCP endpoint; its `gate_check_setup` report checks configuration, not backend row ownership or runtime enforcement.
 
 - **`find_business_agent`** and **`send_to_business`** — Odile Direct: look a
   business up by its phone number, then leave it a message or a booking request
@@ -81,10 +83,10 @@ a browser on first use.
 
 ## Authentication
 
-**Six tools are public; everything that touches an account is OAuth 2.1.**
+**Seven tools are public; everything that touches an account is OAuth 2.1.**
 Without a token, a client can complete the handshake, list the tools, and call
 `get_receptionist_benchmark`, `get_answering_line_offer`, `get_catalog`,
-`estimate_media_job`, and the two Odile Direct tools `find_business_agent` and
+`estimate_media_job`, `get_agent_services`, and the two Odile Direct tools `find_business_agent` and
 `send_to_business` (free within per-IP caps) — none of them read an account. Every other tool, and any request that carries a token
 (valid or not), gets the standard `401` with the discovery header the MCP
 specification asks for:
@@ -116,10 +118,13 @@ Meeting Notes enabled.
 
 | Tool | What it does |
 |---|---|
+| `get_agent_services` | Factual Gate/Direct use cases, connections, first steps, allowances and limits. Public and read-only |
 | `get_receptionist_benchmark` | The published receptionist benchmark: date, lines tested, points by scenario, the fairness note and the limitations. Filter by `line_id` or `scenario_id`; pass `include_evidence` for the quoted evidence per measure. Vendor-run by Odile Labs, and it says so |
 | `get_answering_line_offer` | The answering line billed per minute: the packs and their prices, what is charged, what happens at zero, where it is sold, what the owner must do, and the terms link |
 | `get_catalog` | The live Odile Formats price list and limits, read from the same source the website charges from |
 | `estimate_media_job` | Prices an Odile Formats job **before** anything is uploaded or charged |
+
+Direct reaches participating business lines and verified listings. Resolve the phone number, read the card and use only the skills it advertises. A model needs an MCP-capable client or an application making A2A requests; discovery alone grants no tools or authority. [Connection guide](https://odilelabs.com/a2a#connecting).
 
 ### Odile Direct — reach a business's agent ([odilelabs.com/a2a](https://odilelabs.com/a2a))
 
