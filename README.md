@@ -15,8 +15,7 @@ Three things an AI agent cannot do safely on its own:
 - **Reach a business that has no API.** Most small businesses only have a phone.
   [Odile Direct](https://odilelabs.com/a2a) finds the business by its phone
   number and leaves it a message or books a time, in seconds
-  (`find_business_agent`, `send_to_business`, below). Lookups are free; with a
-  free developer key, 50 tasks a month are free, then credits ($10 for 100).
+  (`find_business_agent`, `send_to_business`, below). 25 free sends per agent identity per UTC month, then $0.25 per delivered message or $1.00 per confirmed booking; $10 or $50 prepaid credit. Lookups and availability stay free; nothing renews.
 - **Stay inside your API.** An agent holding your API key can do anything that
   key allows: repeat a call in a loop, read another customer's data, change
   something nobody approved. [Odile Gate](https://odilelabs.com/gate) gives each
@@ -35,7 +34,7 @@ Before any sign-in, seven tools answer:
 
 - **`find_business_agent`** and **`send_to_business`** — Odile Direct: look a
   business up by its phone number, then leave it a message or a booking request
-  (free within per-IP caps).
+  (subject to the pricing above; anonymous agents share an IP allowance).
 
 - **`get_receptionist_benchmark`** — Odile Labs' published benchmark of AI phone
   receptionists: real test calls to public lines, scored against stated
@@ -87,7 +86,7 @@ a browser on first use.
 Without a token, a client can complete the handshake, list the tools, and call
 `get_receptionist_benchmark`, `get_answering_line_offer`, `get_catalog`,
 `estimate_media_job`, `get_agent_services`, and the two Odile Direct tools `find_business_agent` and
-`send_to_business` (free within per-IP caps) — none of them read an account. Every other tool, and any request that carries a token
+`send_to_business` (subject to Direct pricing; anonymous agents share an IP allowance) — none of them read an account. Every other tool, and any request that carries a token
 (valid or not), gets the standard `401` with the discovery header the MCP
 specification asks for:
 
@@ -134,7 +133,7 @@ Gate project admins can also use `gate_metrics` on the separate Gate MCP endpoin
 |---|---|
 | `get_direct_usage` | Signed-in account allowance, prepaid Direct balance and last 20 charged tasks. Requires `direct:tasks` consent; read-only, no purchase or billing changes; outside the directory connector |
 | `find_business_agent` | Resolves a phone number (E.164) to that business's public Odile Direct agent card: what it can do (take a message, check availability, book). 30 lookups per IP per hour without sign-in; 10,000 per key per day signed in |
-| `send_to_business` | Sends the business a message, an availability check or a booking through Odile Direct. Without sign-in: free within IP caps. Signed in: the first 50 completed tasks per account each month are free, then a delivered message is 1 credit, a confirmed booking 5, an availability check free (100 credits are $10). Keep `message_id` unchanged on a retry; one keyed task per account runs at a time. Free claimed listings take messages only, up to 20 a day |
+| `send_to_business` | Sends the business a message, an availability check or a booking through Odile Direct. 25 free sends per agent identity per UTC month, then $0.25 per delivered message or $1.00 per confirmed booking; $10 or $50 prepaid credit. Lookups and availability stay free; nothing renews. Anonymous agents share an IP allowance; sign in or buy an account key to top up. Keep `message_id` unchanged on a retry; one keyed task per account runs at a time. Free claimed listings take messages only, up to 20 a day |
 
 ### After Hours answering line — per minute
 
